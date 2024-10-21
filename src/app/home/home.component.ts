@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SuiProgress } from '@angular-ex/semantic-ui';
+import {SuiModal, ComponentModalConfig, ModalSize} from "@angular-ex/semantic-ui"
 import { LedsService } from '../services/leds.service';
 import { SocketService } from '../services/socket.service';
 
@@ -35,9 +35,28 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  protected deleteFrame() {
+    if (this.frames.length <= 0) { return; }
+    if (this.selectedFrame == "0") { return; }
+
+    this.frames.splice(parseInt(this.selectedFrame)-1, 1)
+
+    for (let index = 0; index < this.frames.length; index++) {
+      this.frames[index] = (index + 1).toString();
+    }
+  }
+
   protected addFrame() {
     if (this.frames.length >= 6) { return; }
 
     this.frames.push((this.frames.length + 1).toString())
+    this.selectedFrame = (this.frames.length).toString()
+
   }
+}
+
+
+interface IConfirmModalContext {
+  title:string;
+  question:string;
 }

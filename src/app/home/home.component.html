@@ -32,54 +32,85 @@
 
   <div class="ui attached segment">
     <h3>Frame #{{selectedFrame}}</h3>
-    <sui-accordion [closeOthers]="false">
+    <sui-accordion [closeOthers]="true">
       <sui-accordion-panel [isOpen]="false">
         <div title>
           <i class="dropdown icon"></i>
           Velocity
         </div>
         <div content>
-          <p>Using <code>[isOpen]</code> sets the panel to be expanded.</p>
-          <p>Use <code>(isOpenChange)</code> to catch when the panel is toggled.</p>
-          <p>Supports <code>[(isOpen)]</code> syntax.</p>
+          <div class="ui labeled input">
+            <div class="ui label" style="border-radius: 0px;">
+              min
+            </div>
+            <input type="number" value="0" style="width: 60px; border-radius: 0px;">
+            <input type="number" value="100" style="width: 60px; border-radius: 0px;">
+            <div class="ui label" style="border-radius: 0px;">
+              max
+            </div>
+          </div>
+          <br> <br>
+          <p><strong>Velocity curve</strong></p>
+          <sui-select placeholder="Choose">
+            <sui-select-option value="Min velocity"></sui-select-option>
+            <sui-select-option value="Max velocity"></sui-select-option>
+            <sui-select-option value="Soft in"></sui-select-option>
+            <sui-select-option value="Soft out"></sui-select-option>
+            <sui-select-option value="Soft in-out"></sui-select-option>
+          </sui-select>
         </div>
       </sui-accordion-panel>
+
+      <sui-accordion-panel>
+        <div title>
+          <i class="dropdown icon"></i>
+          Delays
+        </div>
+        <div content>
+          <div class="ui right labeled input">
+            <label for="amount" class="ui label">Start</label>
+            <input type="text" value="0" placeholder="time">
+            <div class="ui basic label">seg</div>
+          </div>
+          <div class="ui right labeled input">
+            <label for="amount" class="ui label">Next</label>
+            <input type="text" value="0" placeholder="time">
+            <div class="ui basic label">seg</div>
+          </div>
+        </div>
+      </sui-accordion-panel>
+
       <sui-accordion-panel>
         <div title>
           <i class="dropdown icon"></i>
           Data
         </div>
         <div content>
-          <p>This is the final panel.</p>
-          <p>Opening this one doesn't affect the others as <code>[closeOthers]</code> is set to <code>false</code>.</p>
+          <p class="red text"><b>No data saved</b></p>
         </div>
       </sui-accordion-panel>
     </sui-accordion>
   </div>
   <div class="buttons fluid ui bottom attached">
-    <button class="ui red compact icon button" disabled>
+    <button class="ui red compact icon button inverted" (click)="deleteFrame()">
       <i class="trash icon"></i>
     </button>
 
 
     <button class="ui compact labeled icon button">
-      <i class="play icon"></i>
-      Prev
-    </button>
-
-    <button class="ui compact icon button">
-      <i class="stop icon"></i>
+      <i class="eye icon"></i>
+      View frame
     </button>
     <button class="ui compact labeled icon button">
-      <i class="play icon"></i>
-      Play
+      <i class="arrow alternate circle up icon"></i>
+      Update frame
     </button>
   </div>
 
   <div class="ui divider"></div>
 
   <div class="buttons fluid ui">
-    <button class="ui red compact icon button" disabled>
+    <button class="ui red compact icon button">
       <i class="trash icon"></i>
     </button>
 
@@ -92,6 +123,7 @@
     </button>
   </div>
 </div>
+
 
 
 <sui-accordion class="styled fluid footer" style="z-index: 99;">

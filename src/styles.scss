@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+
+html {
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden;
+}
+
+body {
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden;
+}
+
+app-root {
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden;
+}
+
+drinks-root {
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden;
+}
+
+.hide {
+  display: none;
+
+}
+
+.shadow {
+  -webkit-box-shadow: -2px -1px 15px 7px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: -3px -2px 30px 14px rgba(0, 0, 0, 0.425);
+  box-shadow: 0px 0px 25px 1px rgba(0, 0, 0, 0.15);
+}

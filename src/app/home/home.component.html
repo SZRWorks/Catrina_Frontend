@@ -1,0 +1,185 @@
+<div style="padding-left: 15px; padding-right:15px; padding-top:5px">
+
+</div>
+<div style="padding: 15px; padding-top:5px; width:100vw;">
+
+  <div class="ui attached segment compact" style="padding: 0px !important; padding-left: 15px !important;">
+    <div class="ui transparent big fluid action input">
+      <input type="text" placeholder="Titulo" style="font-weight: bold;">
+      <div class="ui button basic yellow" [class.basic]="!isPublic" (click)="isPublic = !isPublic">
+        <i [classList]="isPublic ?'circle icon':'circle outline icon' " class=""></i>
+        {{isPublic ?'Publico':'Privado'}}
+      </div>
+      <div class="ui button green" style="width: 45px;">
+        <i class="save icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons ui bottom compact" tabindex="0" style="margin-top: 20px;">
+    <button class="ui basic blue icon right pointing label start-label" [class.basic]="selectedFrame != '0'"
+      (click)="selectedFrame = '0'">
+      <i class="circle icon"></i> Start
+    </button>
+    <button class="ui blue icon right pointing label frame-button" [class.basic]="selectedFrame != x"
+      (click)="selectedFrame = x" *ngFor="let x of frames">
+      {{x}}
+    </button>
+    <button class="ui green icon button end-label" (click)="addFrame()">
+      <i class="plus circle icon"></i>
+    </button>
+  </div>
+
+  <div class="ui attached segment">
+    <h3>Frame #{{selectedFrame}}</h3>
+    <sui-accordion [closeOthers]="false">
+      <sui-accordion-panel [isOpen]="false">
+        <div title>
+          <i class="dropdown icon"></i>
+          Velocity
+        </div>
+        <div content>
+          <p>Using <code>[isOpen]</code> sets the panel to be expanded.</p>
+          <p>Use <code>(isOpenChange)</code> to catch when the panel is toggled.</p>
+          <p>Supports <code>[(isOpen)]</code> syntax.</p>
+        </div>
+      </sui-accordion-panel>
+      <sui-accordion-panel>
+        <div title>
+          <i class="dropdown icon"></i>
+          Data
+        </div>
+        <div content>
+          <p>This is the final panel.</p>
+          <p>Opening this one doesn't affect the others as <code>[closeOthers]</code> is set to <code>false</code>.</p>
+        </div>
+      </sui-accordion-panel>
+    </sui-accordion>
+  </div>
+  <div class="buttons fluid ui bottom attached">
+    <button class="ui red compact icon button" disabled>
+      <i class="trash icon"></i>
+    </button>
+
+
+    <button class="ui compact labeled icon button">
+      <i class="play icon"></i>
+      Prev
+    </button>
+
+    <button class="ui compact icon button">
+      <i class="stop icon"></i>
+    </button>
+    <button class="ui compact labeled icon button">
+      <i class="play icon"></i>
+      Play
+    </button>
+  </div>
+
+  <div class="ui divider"></div>
+
+  <div class="buttons fluid ui">
+    <button class="ui red compact icon button" disabled>
+      <i class="trash icon"></i>
+    </button>
+
+    <button class="ui compact icon button">
+      <i class="stop icon"></i>
+    </button>
+    <button class="ui compact labeled icon button">
+      <i class="play icon"></i>
+      Play
+    </button>
+  </div>
+</div>
+
+
+<sui-accordion class="styled fluid footer" style="z-index: 99;">
+  <sui-accordion-panel [isOpen]="false">
+    <div title>
+      <i class="dropdown icon"></i>
+      Left Arm Panel
+    </div>
+    <div content class="controls-panel">
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>x</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>x</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>y</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>z</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" id="myRange" (input)="onSliderChange($event)">
+        <p><b>x</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+      <div class="ui segment vertical-slider-container">
+        <input class="xd vertical-slider"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical; z-index:10;"
+          orient="vertical" type="range" min="1" max="100" value="0" id="myRange" (change)="onSliderChange($event)">
+        <sui-progress class="indicating tiny vertical-progress" [value]="value"></sui-progress>
+        <p><b>y</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+
+      <div class="ui segment horizontal-slider">
+        <input class="ui purple" style="width: 100%; z-index:10" type="range" min="0" max="100" value="50" id="myRange"
+          (input)="onSliderChange($event)">
+        <sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo</sui-progress>
+      </div>
+    </div>
+  </sui-accordion-panel>
+  <sui-accordion-panel>
+    <div title>
+      <i class="dropdown icon"></i>
+      Head Panel
+    </div>
+    <div content class="controls-panel">
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>x</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>y</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+      <div class="ui segment vertical-slider-container">
+        <input class="ui purple"
+          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
+          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
+        <p><b>z</b></p>
+        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
+      </div>
+    </div>
+  </sui-accordion-panel>
+</sui-accordion>

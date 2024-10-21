@@ -6,9 +6,9 @@
   <div class="ui attached segment compact" style="padding: 0px !important; padding-left: 15px !important;">
     <div class="ui transparent big fluid action input">
       <input type="text" placeholder="Titulo" style="font-weight: bold;">
-      <div class="ui button basic yellow" [class.basic]="!isPublic" (click)="isPublic = !isPublic">
-        <i [classList]="isPublic ?'circle icon':'circle outline icon' " class=""></i>
-        {{isPublic ?'Publico':'Privado'}}
+      <div class="ui button basic yellow" [class.basic]="!animationData.isPublic" (click)="animationData.isPublic = !animationData.isPublic">
+        <i [classList]="animationData.isPublic ?'circle icon':'circle outline icon' " class=""></i>
+        {{animationData.isPublic ?'Publico':'Privado'}}
       </div>
       <div class="ui button green" style="width: 45px;">
         <i class="save icon"></i>
@@ -17,13 +17,13 @@
   </div>
 
   <div class="buttons ui bottom compact" tabindex="0" style="margin-top: 20px;">
-    <button class="ui basic blue icon right pointing label start-label" [class.basic]="selectedFrame != '0'"
-      (click)="selectedFrame = '0'">
+    <button class="ui basic blue icon right pointing label start-label" [class.basic]="selectedFrame.id != 0"
+      (click)="selectedFrame = this.frames[0]">
       <i class="circle icon"></i> Start
     </button>
-    <button class="ui blue icon right pointing label frame-button" [class.basic]="selectedFrame != x"
-      (click)="selectedFrame = x" *ngFor="let x of frames">
-      {{x}}
+    <button class="ui blue icon right pointing label frame-button" [class.basic]="selectedFrame.id != frame.id"
+      (click)="selectedFrame = frame" *ngFor="let frame of frames | slice:1">
+      {{frame.id}}
     </button>
     <button class="ui green icon button end-label" (click)="addFrame()">
       <i class="plus circle icon"></i>
@@ -43,7 +43,7 @@
             <div class="ui label" style="border-radius: 0px;">
               min
             </div>
-            <input type="number" value="0" style="width: 60px; border-radius: 0px;">
+            <input type="number" [value]="selectedFrame.minVelocity" style="width: 60px; border-radius: 0px;" (change)="selectedFrame.minVelocity=getNumericValue($event)">
             <input type="number" value="100" style="width: 60px; border-radius: 0px;">
             <div class="ui label" style="border-radius: 0px;">
               max

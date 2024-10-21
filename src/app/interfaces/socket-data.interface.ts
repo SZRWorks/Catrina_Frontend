@@ -1,10 +1,11 @@
 
+export enum PartType {
+  Stepper,
+  Servo
+}
 
-export interface StepperStepData {
-  name: string,
-  desc: string,
-  id: number,
-  color: string
-  alcoholFree?: boolean
-  special?: boolean
+export interface PartState {
+  partID: string,
+  partType: PartType,
+  value: number // 0-100
 }

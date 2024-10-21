@@ -1,15 +1,19 @@
+import { PartState } from "./socket-data.interface"
+
 
 export interface Animation {
   id: number,
-  title: string,
-  public: boolean,
-  frames: AnimationFrame[]
+  title?: string,
+  isPublic?: boolean,
+  frames?: AnimationFrame[]
 }
 
 export interface AnimationFrame {
   id: number,
-  minVelocity: number,
-  maxVelocity: number,
-  startDelay: number,
-  endDelay: number,
+  minVelocity?: number,
+  maxVelocity?: number,
+  startDelay?: number,
+  endDelay?: number,
+  data?: PartState[]
 }
+

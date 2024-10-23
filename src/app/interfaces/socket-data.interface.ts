@@ -5,7 +5,7 @@ export enum PartType {
 }
 
 export interface PartState {
-  partID: string,
-  partType: PartType,
-  value: number // 0-100
+  id: string,
+  value: number, // 0-100
+  realValue: number // 0-100 Valor solo utilizado en frontend
 }

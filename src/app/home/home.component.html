@@ -6,7 +6,8 @@
   <div class="ui attached segment compact" style="padding: 0px !important; padding-left: 15px !important;">
     <div class="ui transparent big fluid action input">
       <input type="text" placeholder="Titulo" style="font-weight: bold;">
-      <div class="ui button basic yellow" [class.basic]="!animationData.isPublic" (click)="animationData.isPublic = !animationData.isPublic">
+      <div class="ui button basic yellow" [class.basic]="!animationData.isPublic"
+        (click)="animationData.isPublic = !animationData.isPublic">
         <i [classList]="animationData.isPublic ?'circle icon':'circle outline icon' " class=""></i>
         {{animationData.isPublic ?'Publico':'Privado'}}
       </div>
@@ -43,15 +44,18 @@
             <div class="ui label" style="border-radius: 0px;">
               min
             </div>
-            <input type="number" [value]="selectedFrame.minVelocity" style="width: 60px; border-radius: 0px;" (change)="selectedFrame.minVelocity=getNumericValue($event)">
-            <input type="number" value="100" style="width: 60px; border-radius: 0px;">
+            <input type="number" min="0" max="99" style="width: 60px; border-radius: 0px;"
+              [value]="selectedFrame.minVelocity" (change)="selectedFrame.minVelocity=getNumericValue($event)">
+            <input type="number" max="1" max="100" style="width: 60px; border-radius: 0px;"
+              [value]="selectedFrame.maxVelocity" (change)="selectedFrame.maxVelocity=getNumericValue($event)">
             <div class="ui label" style="border-radius: 0px;">
               max
             </div>
           </div>
           <br> <br>
           <p><strong>Velocity curve</strong></p>
-          <sui-select placeholder="Choose">
+          <sui-select placeholder="Choose" (selectedOptionChange)="selectedFrame.velocityCurve = $event"
+            [(ngModel)]="selectedFrame.velocityCurve">
             <sui-select-option value="Min velocity"></sui-select-option>
             <sui-select-option value="Max velocity"></sui-select-option>
             <sui-select-option value="Soft in"></sui-select-option>
@@ -69,12 +73,14 @@
         <div content>
           <div class="ui right labeled input">
             <label for="amount" class="ui label">Start</label>
-            <input type="text" value="0" placeholder="time">
+            <input type="text" value="0" placeholder="time" [value]="selectedFrame.startDelay"
+              (change)="selectedFrame.startDelay=getNumericValue($event)">
             <div class="ui basic label">seg</div>
           </div>
           <div class="ui right labeled input">
             <label for="amount" class="ui label">Next</label>
-            <input type="text" value="0" placeholder="time">
+            <input type="text" value="0" placeholder="time" [value]="selectedFrame.endDelay"
+              (change)="selectedFrame.endDelay=getNumericValue($event)">
             <div class="ui basic label">seg</div>
           </div>
         </div>
@@ -86,13 +92,14 @@
           Data
         </div>
         <div content>
-          <p class="red text"><b>No data saved</b></p>
+          <p class="red text" *ngIf="selectedFrame.data?.length! <= 0"><b>No data saved</b></p>
+          <p class="text" *ngFor="let dat of selectedFrame.data">{{dat.id}}: <b>{{dat.value}}</b></p>
         </div>
       </sui-accordion-panel>
     </sui-accordion>
   </div>
   <div class="buttons fluid ui bottom attached">
-    <button class="ui red compact icon button inverted" (click)="deleteFrame()">
+    <button class="ui red compact icon button inverted" [disabled]="selectedFrame.id == 0" (click)="deleteFrame()">
       <i class="trash icon"></i>
     </button>
 
@@ -101,7 +108,7 @@
       <i class="eye icon"></i>
       View frame
     </button>
-    <button class="ui compact labeled icon button">
+    <button class="ui compact labeled icon button" (click)="captureFrameData()">
       <i class="arrow alternate circle up icon"></i>
       Update frame
     </button>
@@ -127,89 +134,19 @@
 
 
 <sui-accordion class="styled fluid footer" style="z-index: 99;">
-  <sui-accordion-panel [isOpen]="false">
+  <sui-accordion-panel *ngFor="let panel of panels; let panel_i = index;">
     <div title>
       <i class="dropdown icon"></i>
-      Left Arm Panel
+      {{this.formatName(panel)}} panel
     </div>
     <div content class="controls-panel">
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>x</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>x</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>y</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>z</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" id="myRange" (input)="onSliderChange($event)">
-        <p><b>x</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-      <div class="ui segment vertical-slider-container">
+      <div class="ui segment vertical-slider-container" *ngFor="let part of this.getPanelStates(panel); let i = index">
         <input class="xd vertical-slider"
           style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical; z-index:10;"
-          orient="vertical" type="range" min="1" max="100" value="0" id="myRange" (change)="onSliderChange($event)">
-        <sui-progress class="indicating tiny vertical-progress" [value]="value"></sui-progress>
-        <p><b>y</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-
-      <div class="ui segment horizontal-slider">
-        <input class="ui purple" style="width: 100%; z-index:10" type="range" min="0" max="100" value="50" id="myRange"
-          (input)="onSliderChange($event)">
-        <sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo</sui-progress>
-      </div>
-    </div>
-  </sui-accordion-panel>
-  <sui-accordion-panel>
-    <div title>
-      <i class="dropdown icon"></i>
-      Head Panel
-    </div>
-    <div content class="controls-panel">
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>x</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>y</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-      <div class="ui segment vertical-slider-container">
-        <input class="ui purple"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical;" orient="vertical"
-          type="range" min="1" max="100" value="50" class="slider" id="myRange" (input)="onSliderChange($event)">
-        <p><b>z</b></p>
+          orient="vertical" type="range" min="1" max="100" [value]="part.value" id="myRange"
+          (change)="part.value = getNumericValue($event); onLocalStateUpdated(part);">
+        <sui-progress class="indicating tiny vertical-progress" [value]="part.realValue"></sui-progress>
+        <p><b>{{this.formatName(part.id.split('/')[1])}}</b></p>
         <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
       </div>
     </div>

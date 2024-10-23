@@ -12,6 +12,7 @@ export interface AnimationFrame {
   id: number,
   minVelocity?: number,
   maxVelocity?: number,
+  velocityCurve?: string,
   startDelay?: number,
   endDelay?: number,
   data?: PartState[]

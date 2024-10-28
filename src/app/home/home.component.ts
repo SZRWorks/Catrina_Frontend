@@ -5,6 +5,8 @@ import { SocketService } from '../services/socket.service';
 import { AnimationFrame, Animation } from '../interfaces/animation-frame.interface';
 import { PartState, PartType } from '../interfaces/socket-data.interface';
 import { state } from '@angular/animations';
+import { AnimationsService } from '../services/animations.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,143 +15,73 @@ import { state } from '@angular/animations';
 })
 export class HomeComponent implements OnInit {
 
-  protected value = 0;
-  protected animationData: Animation = {
-    id: -1,
-    title: "",
-    isPublic: false,
-    frames: []
-  };
-  protected frames: AnimationFrame[] = [{
-    id: 0,
-    minVelocity: 0,
-    maxVelocity: 100,
-    velocityCurve: "Min velocity",
-    startDelay: 0,
-    endDelay: 0,
-    data: []
-  }];
-  protected selectedFrame: AnimationFrame = this.frames[0];
+  protected availableColors = ['violet', 'blue', 'teal', 'green', 'olive', 'yellow', 'orange', 'red']
+  protected animations: Animation[] = []
 
-  protected panels: string[] = [];
-  protected actualStates: PartState[] = [
-    { id: 'Head/X', value: 0, realValue: 0 },
-    { id: 'Head/Y', value: 0, realValue: 0 },
-    { id: 'Head/Z', value: 0, realValue: 0 },
-
-    { id: 'LeftArm/Meñique', value: 0, realValue: 0 },
-    { id: 'LeftArm/Anular', value: 0, realValue: 0 },
-    { id: 'LeftArm/Medio', value: 0, realValue: 0 },
-    { id: 'LeftArm/Indice', value: 0, realValue: 0 },
-    { id: 'LeftArm/Pulgar', value: 0, realValue: 0 },
-    { id: 'LeftArm/Pulgar2', value: 0, realValue: 0 },
-    { id: 'LeftArm/Muñeca', value: 0, realValue: 0 },
-    { id: 'LeftArm/Codo', value: 0, realValue: 0 },
-
-    { id: 'RightArm/Meñique', value: 0, realValue: 0 },
-    { id: 'RightArm/Anular', value: 0, realValue: 0 },
-    { id: 'RightArm/Medio', value: 0, realValue: 0 },
-    { id: 'RightArm/Indice', value: 0, realValue: 0 },
-    { id: 'RightArm/Pulgar', value: 0, realValue: 0 },
-    { id: 'RightArm/Pulgar2', value: 0, realValue: 0 },
-    { id: 'RightArm/Muñeca', value: 0, realValue: 0 },
-    { id: 'RightArm/Codo', value: 0, realValue: 0 },
-  ]
-
-  // Esto está mal xd
-  protected auxIndex: number = 0;
+  protected isAdmin: boolean = true;
+  protected selectedAnimation?: Animation;
 
 
   constructor(
-    private _ledsService: LedsService,
-    private _socketService: SocketService
+    private _socketService: SocketService,
+    private _animationsService: AnimationsService,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
-    this._socketService.on("steps", (value: number) => { this.value = value * 100; console.log(value); });
-
-    this.fillPanels();
-  }
-
-  protected fillPanels() {
-    this.actualStates.forEach((state: PartState) => {
-      let identifier: string = state.id.split('/')[0];
-
-      if (!this.panels.includes(identifier)) {
-        this.panels.push(identifier);
+    this._animationsService.getAll().subscribe({
+      next: (_res: Animation[]) => {
+        console.log(_res);
+        this.animations = _res;
+      },
+      error: (error: any[]) => {
+        console.log(error);
       }
     });
   }
 
-  protected getPanelStates(panelName: string): PartState[] {
-    let states: PartState[] = [];
-    this.actualStates.forEach((state: PartState) => {
-      let identifier: string = state.id.split('/')[0];
+  protected goToEdit() {
+    if (this.selectedAnimation == undefined) { return; }
 
-      if (identifier == panelName) { states.push(state); }
+    this._router.navigate([`/edit/${this.selectedAnimation?.id}`]);
+  }
+
+  protected addAnimation() {
+    this._animationsService.save({
+      id: -1,
+      title: "",
+      isPublic: false,
+      frames: []
+    }).subscribe({
+      next: (_res: Animation) => {
+        this._router.navigate([`/edit/${_res.id}`]);
+      },
+      error: (error: any[]) => {
+        console.log(error);
+      }
     });
-
-    return states;
   }
 
-  protected formatName(name: string): string {
-    var formatedIdentifier = name.replace(/([A-Z])/g, ' $1').trim();
-    formatedIdentifier = formatedIdentifier.replace(/  +/g, ' ');
+  protected deleteAnimation() {
+    if (this.selectedAnimation == undefined) { return; }
 
-    return formatedIdentifier;
+    this._animationsService.delete(this.selectedAnimation).subscribe({
+      next: (_res: Animation) => {
+        window.location.reload();
+      },
+      error: (error: any[]) => {
+        console.log(error);
+      }
+    });
   }
 
-  protected onLocalStateUpdated(state: PartState) {
-    // notificar al backend de un cambio
-    this._socketService.emit('stateUpdated', state);
-  }
-
-  protected onRemoteStateUpdated(remoteState: PartState) {
-    let localState: PartState = this.actualStates.find((state) => state.id === remoteState.id)!;
-    if (localState == null) { return; }
-
-    localState.value = remoteState.realValue;
-    localState.realValue = remoteState.realValue;
-  }
-
-
-  protected deleteFrame() {
-    if (this.frames.length <= 0) { return; }
-    if (this.selectedFrame.id == 0) { return; }
-
-    this.frames.splice(this.selectedFrame.id - 1, 1);
-    for (let index = 0; index < this.frames.length; index++) {
-      this.frames[index].id = index;
+  protected onCardClick(animation: Animation) {
+    if (this.selectedAnimation?.id == animation.id) {
+      this.selectedAnimation = undefined;
+      return;
     }
 
-    this.selectedFrame = this.frames[0];
-  }
-
-  protected addFrame() {
-    if (this.frames.length >= 10) { return; }
-
-    this.frames.push({
-      id: this.frames.length,
-      minVelocity: 0,
-      maxVelocity: 100,
-      velocityCurve: "Min velocity",
-      startDelay: 0,
-      endDelay: 0,
-      data: []
-    });
-    this.selectedFrame = this.frames[this.frames.length - 1];
-  }
-
-  protected captureFrameData() {
-    this.selectedFrame.data = this.actualStates;
-  }
-
-  protected getValue($event: any): any {
-    return $event.target.value
-  }
-
-  protected getNumericValue($event: any): number {
-    return parseInt($event.target.value);
+    this.selectedAnimation = animation
   }
 }
 

@@ -1,154 +1,69 @@
 <div style="padding-left: 15px; padding-right:15px; padding-top:5px">
 
 </div>
+
+
 <div style="padding: 15px; padding-top:5px; width:100vw;">
 
-  <div class="ui attached segment compact" style="padding: 0px !important; padding-left: 15px !important;">
-    <div class="ui transparent big fluid action input">
-      <input type="text" placeholder="Titulo" style="font-weight: bold;">
-      <div class="ui button basic yellow" [class.basic]="!animationData.isPublic"
-        (click)="animationData.isPublic = !animationData.isPublic">
-        <i [classList]="animationData.isPublic ?'circle icon':'circle outline icon' " class=""></i>
-        {{animationData.isPublic ?'Publico':'Privado'}}
+  <div class="ui attached top segment secondary blue">
+    <h3>Animaciones</h3>
+  </div>
+
+  <div class="ui attached bottom blurring segment animation-buttons" style="margin-bottom: 10px;">
+    <sui-dimmer class="page bottom aligned blurring" [isDimmed]="false" [isClickable]="false">
+      <div class="ui text loader">Reproduciendo <b>Saludar</b>!</div>
+      <div class="content">
+        <sui-progress class="indicating active inverted" [value]="15" [showProgress]="true" [maximum]="100" [value]="75"
+          style="width: 75vw;">
+          <p class="text white">Podrá elegir otra animación cuando la actual termine</p>
+        </sui-progress>
+
       </div>
-      <div class="ui button green" style="width: 45px;">
-        <i class="save icon"></i>
+
+    </sui-dimmer>
+
+    <div class="ui card {{availableColors[(i%availableColors.length)]}}" (click)="onCardClick(animation)"
+      *ngFor="let animation of animations; let i=index" [class.selected]="selectedAnimation?.id == animation.id">
+      <div class="content">
+        <div class="ui header {{availableColors[(i%availableColors.length)]}}">
+          <i class="hand paper outline icon"></i>
+          {{animation.title}}
+        </div>
+
+        <div class="meta inverted">
+          <span>{{animation.frames?.length}} {{(animation.frames?.length! != 1) ? 'frames' : 'frame'}}</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="buttons ui bottom compact" tabindex="0" style="margin-top: 20px;">
-    <button class="ui basic blue icon right pointing label start-label" [class.basic]="selectedFrame.id != 0"
-      (click)="selectedFrame = this.frames[0]">
-      <i class="circle icon"></i> Start
-    </button>
-    <button class="ui blue icon right pointing label frame-button" [class.basic]="selectedFrame.id != frame.id"
-      (click)="selectedFrame = frame" *ngFor="let frame of frames | slice:1">
-      {{frame.id}}
-    </button>
-    <button class="ui green icon button end-label" (click)="addFrame()">
-      <i class="plus circle icon"></i>
-    </button>
-  </div>
+  <button class="ui compact icon button green inverted" [disabled]="!isAdmin" (click)="addAnimation()">
+    <i class="plus circle icon"></i>
+  </button>
+  <button class="ui compact icon button red inverted" [disabled]="!isAdmin || selectedAnimation == undefined"
+    (click)="deleteAnimation()">
+    <i class="trash icon"></i>
+  </button>
+  <button class="ui compact icon button orange inverted" [disabled]="!isAdmin || selectedAnimation == undefined"
+    (click)="goToEdit()">
+    <i class="edit outline icon"></i>
+  </button>
 
-  <div class="ui attached segment">
-    <h3>Frame #{{selectedFrame}}</h3>
-    <sui-accordion [closeOthers]="true">
-      <sui-accordion-panel [isOpen]="false">
-        <div title>
-          <i class="dropdown icon"></i>
-          Velocity
-        </div>
-        <div content>
-          <div class="ui labeled input">
-            <div class="ui label" style="border-radius: 0px;">
-              min
-            </div>
-            <input type="number" min="0" max="99" style="width: 60px; border-radius: 0px;"
-              [value]="selectedFrame.minVelocity" (change)="selectedFrame.minVelocity=getNumericValue($event)">
-            <input type="number" max="1" max="100" style="width: 60px; border-radius: 0px;"
-              [value]="selectedFrame.maxVelocity" (change)="selectedFrame.maxVelocity=getNumericValue($event)">
-            <div class="ui label" style="border-radius: 0px;">
-              max
-            </div>
-          </div>
-          <br> <br>
-          <p><strong>Velocity curve</strong></p>
-          <sui-select placeholder="Choose" (selectedOptionChange)="selectedFrame.velocityCurve = $event"
-            [(ngModel)]="selectedFrame.velocityCurve">
-            <sui-select-option value="Min velocity"></sui-select-option>
-            <sui-select-option value="Max velocity"></sui-select-option>
-            <sui-select-option value="Soft in"></sui-select-option>
-            <sui-select-option value="Soft out"></sui-select-option>
-            <sui-select-option value="Soft in-out"></sui-select-option>
-          </sui-select>
-        </div>
-      </sui-accordion-panel>
-
-      <sui-accordion-panel>
-        <div title>
-          <i class="dropdown icon"></i>
-          Delays
-        </div>
-        <div content>
-          <div class="ui right labeled input">
-            <label for="amount" class="ui label">Start</label>
-            <input type="text" value="0" placeholder="time" [value]="selectedFrame.startDelay"
-              (change)="selectedFrame.startDelay=getNumericValue($event)">
-            <div class="ui basic label">seg</div>
-          </div>
-          <div class="ui right labeled input">
-            <label for="amount" class="ui label">Next</label>
-            <input type="text" value="0" placeholder="time" [value]="selectedFrame.endDelay"
-              (change)="selectedFrame.endDelay=getNumericValue($event)">
-            <div class="ui basic label">seg</div>
-          </div>
-        </div>
-      </sui-accordion-panel>
-
-      <sui-accordion-panel>
-        <div title>
-          <i class="dropdown icon"></i>
-          Data
-        </div>
-        <div content>
-          <p class="red text" *ngIf="selectedFrame.data?.length! <= 0"><b>No data saved</b></p>
-          <p class="text" *ngFor="let dat of selectedFrame.data">{{dat.id}}: <b>{{dat.value}}</b></p>
-        </div>
-      </sui-accordion-panel>
-    </sui-accordion>
-  </div>
-  <div class="buttons fluid ui bottom attached">
-    <button class="ui red compact icon button inverted" [disabled]="selectedFrame.id == 0" (click)="deleteFrame()">
-      <i class="trash icon"></i>
-    </button>
-
-
-    <button class="ui compact labeled icon button">
-      <i class="eye icon"></i>
-      View frame
-    </button>
-    <button class="ui compact labeled icon button" (click)="captureFrameData()">
-      <i class="arrow alternate circle up icon"></i>
-      Update frame
-    </button>
-  </div>
-
-  <div class="ui divider"></div>
-
-  <div class="buttons fluid ui">
-    <button class="ui red compact icon button">
-      <i class="trash icon"></i>
-    </button>
-
-    <button class="ui compact icon button">
-      <i class="stop icon"></i>
-    </button>
-    <button class="ui compact labeled icon button">
-      <i class="play icon"></i>
-      Play
-    </button>
-  </div>
+  <button class="ui compact icon button" [disabled]="selectedAnimation == undefined">
+    <i class="stop icon"></i>
+  </button>
+  <button class="ui compact labeled icon button" [disabled]="selectedAnimation == undefined">
+    <i class="play icon"></i>
+    Reproducir
+  </button>
 </div>
 
+<div class="ui container">
+  <div class="ui teal message inverted">
+    <i class="lightbulb icon"></i>
+    Selecciona una animacion y luego presiona el boton de reproducir!
+  </div>
+</div>
+<div class="styled fluid footer">
 
-
-<sui-accordion class="styled fluid footer" style="z-index: 99;">
-  <sui-accordion-panel *ngFor="let panel of panels; let panel_i = index;">
-    <div title>
-      <i class="dropdown icon"></i>
-      {{this.formatName(panel)}} panel
-    </div>
-    <div content class="controls-panel">
-      <div class="ui segment vertical-slider-container" *ngFor="let part of this.getPanelStates(panel); let i = index">
-        <input class="xd vertical-slider"
-          style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical; z-index:10;"
-          orient="vertical" type="range" min="1" max="100" [value]="part.value" id="myRange"
-          (change)="part.value = getNumericValue($event); onLocalStateUpdated(part);">
-        <sui-progress class="indicating tiny vertical-progress" [value]="part.realValue"></sui-progress>
-        <p><b>{{this.formatName(part.id.split('/')[1])}}</b></p>
-        <!--<sui-progress class="indicating tiny" [value]="value" style="width:100%;">Codo izquierdo</sui-progress>-->
-      </div>
-    </div>
-  </sui-accordion-panel>
-</sui-accordion>
+</div>

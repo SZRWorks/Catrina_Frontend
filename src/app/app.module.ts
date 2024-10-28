@@ -9,11 +9,14 @@ import { SocketService } from './services/socket.service';
 import { SystemService } from './services/system.service';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AnimationsService } from './services/animations.service';
+import { EditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
     ReactiveFormsModule,
     SuiModule
   ],
-  providers: [LedsService, SocketService, SystemService],
+  providers: [LedsService, SocketService, SystemService, AnimationsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

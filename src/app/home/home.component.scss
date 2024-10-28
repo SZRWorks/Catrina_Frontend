@@ -1,78 +1,53 @@
-.vertical-slider-container {
-  width: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.7em;
+.animation-buttons {
+    display: flex !important;
+    height: 65vh !important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto !important;
+    align-content: flex-start;
+    gap: 15px;
 }
 
-.horizontal-slider {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.card {
+    margin: 0px !important;
 }
 
-.controls-panel {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-  align-items: baseline;
-  align-content: center;
-  gap: 15px;
+.selected {
+    scale: 1.05;
+    z-index: 10;
+    box-shadow: rgba(100, 100, 111, 0.65) 0px 7px 29px 0px !important;
+
+    &.red {
+        outline: 2px rgb(208, 73, 73) solid !important;
+    }
+
+    &.orange {
+        outline: 2px orange solid !important;
+    }
+
+    &.olive {
+        outline: 2px rgb(185, 185, 5) solid !important;
+    }
+
+    &.green {
+        outline: 2px rgb(9, 181, 9) solid !important;
+    }
+
+    &.yellow {
+        outline: 2px rgb(230, 230, 32) solid !important;
+    }
+
+    &.violet {
+        outline: 2px rgb(165, 71, 205) solid !important;
+    }
+
+    &.teal {
+        outline: 2px rgb(3, 152, 152) solid !important;
+    }
+
+    &.blue {
+        outline: 2px rgb(0, 102, 255) solid !important;
+    }
 }
-
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-
-.vertical-progress {
-  position: absolute;
-  right: -45px;
-  width: 320%;
-  max-width: none;
-  transform: rotate(-90deg);
-  z-index: 1;
-  border-radius: 0px !important;
-}
-
-.slider-container {
-  position: relative;
-  height: 200px;
-  width: 8px;
-}
-
-
-.label {
-  border-radius: 0px;
-}
-
-.start-label {
-  border-top-left-radius: 10px !important;
-  border-bottom-left-radius: 0px !important;
-  border-bottom: 0px !important;
-  border-right: 0px !important;
-  margin: 0px !important;
-}
-
-
-.frame-button{
-  margin: 0px !important;
-  border-right: 0px !important;
-  border-bottom: 0px !important;
-  width: 40px;
-}
-
-.end-label {
-  border-radius: 0px !important;
-  border-top-right-radius: 10px !important;
-  border-bottom: 0px !important;
-}
-

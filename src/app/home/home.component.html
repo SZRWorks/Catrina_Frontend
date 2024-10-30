@@ -10,7 +10,7 @@
   </div>
 
   <div class="ui attached bottom blurring segment animation-buttons" style="margin-bottom: 10px;">
-    <sui-dimmer class="page bottom aligned blurring" [isDimmed]="false" [isClickable]="false">
+    <sui-dimmer class="page bottom aligned blurring" [isDimmed]="playing" [isClickable]="false">
       <div class="ui text loader">Reproduciendo <b>Saludar</b>!</div>
       <div class="content">
         <sui-progress class="indicating active inverted" [value]="15" [showProgress]="true" [maximum]="100" [value]="75"
@@ -52,7 +52,7 @@
   <button class="ui compact icon button" [disabled]="selectedAnimation == undefined">
     <i class="stop icon"></i>
   </button>
-  <button class="ui compact labeled icon button" [disabled]="selectedAnimation == undefined">
+  <button class="ui compact labeled icon button" [disabled]="selectedAnimation == undefined" (click)="playSelectedAnimation()">
     <i class="play icon"></i>
     Reproducir
   </button>

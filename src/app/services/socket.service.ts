@@ -10,7 +10,7 @@ export class SocketService extends Socket {
 
   constructor() {
     super({
-      url: 'http://192.168.1.16:3000',
+      url: 'http://192.168.1.12:3000',
 
     });
   }

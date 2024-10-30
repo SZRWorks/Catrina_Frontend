@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
 
   protected isAdmin: boolean = true;
   protected selectedAnimation?: Animation;
+  protected playing: boolean = false;
 
 
   constructor(
@@ -82,6 +83,10 @@ export class HomeComponent implements OnInit {
     }
 
     this.selectedAnimation = animation
+  }
+
+  protected playSelectedAnimation() {
+    this.playing = true;
   }
 }
 

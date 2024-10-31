@@ -8,13 +8,20 @@
 
 <div style="padding: 15px; padding-top:5px; width:100vw;">
 
-  <div class="ui attached segment compact" style="padding: 0px !important; padding-left: 15px !important;">
+  <div class="ui attached segment compact" style="padding: 0px !important;">
     <div class="ui transparent big fluid action input">
-      <input type="text" placeholder="Titulo" style="font-weight: bold;" [value]="animationData.title" (change)="animationData.title = getValue($event);">
-      <div class="ui button basic yellow" [class.basic]="!animationData.isPublic"
-        (click)="animationData.isPublic = !animationData.isPublic">
-        <i [classList]="animationData.isPublic ?'circle icon':'circle outline icon' " class=""></i>
-        {{animationData.isPublic ?'Publico':'Privado'}}
+
+      <div class="ui button blue inverted" style="width: 50px; margin: 0px !important; margin-right: 5px !important"
+        [class.disabled]="componentsWorking" (click)="goHome()">
+        <i class="home icon"></i>
+      </div>
+
+      <input type="text" placeholder="Titulo" style="font-weight: bold;" [value]="animation.title"
+        (change)="animation.title = getValue($event);">
+      <div class="ui button basic yellow" [class.basic]="!animation.isPublic"
+        (click)="animation.isPublic = !animation.isPublic">
+        <i [classList]="animation.isPublic ?'circle icon':'circle outline icon' " class=""></i>
+        {{animation.isPublic ?'Publico':'Privado'}}
       </div>
       <div class="ui button green" style="width: 45px;" [class.disabled]="componentsWorking" (click)="saveAnimation()">
         <i class="save icon"></i>
@@ -37,6 +44,10 @@
   </div>
 
   <div class="ui attached segment">
+    <sui-dimmer class="bottom aligned inverted" [isDimmed]="playingAnimation" [isClickable]="false">
+      <div class="ui text loader">Reproduciendo animacion...</div>
+    </sui-dimmer>
+
     <h3>Frame #{{selectedFrame.id}}</h3>
     <sui-accordion [closeOthers]="true">
       <sui-accordion-panel [isOpen]="false">
@@ -105,16 +116,16 @@
     </sui-accordion>
   </div>
   <div class="buttons fluid ui bottom attached">
-    <button class="ui red compact icon button inverted" [disabled]="selectedFrame.id == 0" (click)="deleteFrame()">
+    <button class="ui red compact icon button inverted" [disabled]="selectedFrame.id == 0" (click)="deleteFrame()" [disabled]="playingAnimation">
       <i class="trash icon"></i>
     </button>
 
 
-    <button class="ui compact labeled icon button">
+    <button class="ui compact labeled icon button" (click)="previewFrame()" [disabled]="playingAnimation">
       <i class="eye icon"></i>
       View frame
     </button>
-    <button class="ui compact labeled icon button" (click)="captureFrameData()">
+    <button class="ui compact labeled icon button" (click)="captureFrameData()" [disabled]="playingAnimation">
       <i class="arrow alternate circle up icon"></i>
       Update frame
     </button>
@@ -130,9 +141,9 @@
     <button class="ui compact icon button">
       <i class="stop icon"></i>
     </button>
-    <button class="ui compact labeled icon button">
-      <i class="play icon"></i>
-      Play
+    <button class="ui compact labeled icon button" (click)="playAnimation()">
+      <i class="{{playingAnimation? 'loading spinner': 'play'}} icon"></i>
+      {{playingAnimation? 'playing': 'play'}}
     </button>
   </div>
 </div>
@@ -150,7 +161,7 @@
         <input class="vertical-slider"
           style="width: 100%;writing-mode: vertical-lr;direction: rtl;appearance: slider-vertical; z-index:10;"
           orient="vertical" type="range" min="1" max="100" [value]="part.value" id="myRange"
-          (change)="part.value = getNumericValue($event); onLocalStateUpdated(part);">
+          (change)="part.value = getNumericValue($event); onLocalStateUpdated(part);" [disabled]="playingAnimation">
         <sui-progress class="indicating tiny vertical-progress" [value]="part.realValue"></sui-progress>
         <p><b>{{this.formatName(part.id.split('/')[1])}}</b></p>
       </div>

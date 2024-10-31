@@ -10,10 +10,10 @@
   </div>
 
   <div class="ui attached bottom blurring segment animation-buttons" style="margin-bottom: 10px;">
-    <sui-dimmer class="page bottom aligned blurring" [isDimmed]="playing" [isClickable]="false">
-      <div class="ui text loader">Reproduciendo <b>Saludar</b>!</div>
+    <sui-dimmer class="page bottom aligned blurring" [isDimmed]="playing || working" [isClickable]="false">
+      <div class="ui text loader">{{animationTitle}}</div>
       <div class="content">
-        <sui-progress class="indicating active inverted" [value]="15" [showProgress]="true" [maximum]="100" [value]="75"
+        <sui-progress class="indicating active inverted" [value]="work_progress" [showProgress]="true" [maximum]="100" [value]="75"
           style="width: 75vw;">
           <p class="text white">Podrá elegir otra animación cuando la actual termine</p>
         </sui-progress>
@@ -32,6 +32,7 @@
 
         <div class="meta inverted">
           <span>{{animation.frames?.length}} {{(animation.frames?.length! != 1) ? 'frames' : 'frame'}}</span>
+          <span *ngIf="isAdmin">| <span [class.orange]="!animation.isPublic" [class.teal]="animation.isPublic" class="text">{{animation.isPublic ? 'Publica' : 'Privada'}}</span> </span>
         </div>
       </div>
     </div>
@@ -60,7 +61,7 @@
 
 <div class="ui container">
   <div class="ui teal message inverted">
-    <i class="lightbulb icon"></i>
+    <i class="lightbulb icon" (click)="goToAuthPage()"></i>
     Selecciona una animacion y luego presiona el boton de reproducir!
   </div>
 </div>

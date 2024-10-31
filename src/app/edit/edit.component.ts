@@ -6,7 +6,8 @@ import { AnimationFrame, Animation } from '../interfaces/animation-frame.interfa
 import { PartState, PartType } from '../interfaces/socket-data.interface';
 import { state } from '@angular/animations';
 import { AnimationsService } from '../services/animations.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AnimatorService } from '../services/animator.service';
 
 @Component({
   selector: 'app-edit',
@@ -16,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 export class EditComponent implements OnInit {
 
   protected value = 0;
-  protected animationData: Animation = {
+  protected animation: Animation = {
     id: -1,
     title: "",
     isPublic: false,
@@ -59,12 +60,14 @@ export class EditComponent implements OnInit {
   ]
   protected componentsWorking: boolean = false;
   protected loading: boolean = true;
+  protected playingAnimation: boolean = false;
 
 
   constructor(
-    private _ledsService: LedsService,
+    private _router: Router,
     private _socketService: SocketService,
     private _animationsService: AnimationsService,
+    private _animatorService: AnimatorService,
     private _activatedRoute: ActivatedRoute
   ) { }
 
@@ -72,9 +75,9 @@ export class EditComponent implements OnInit {
     let id: number = parseInt(this._activatedRoute.snapshot.paramMap.get('id') || '-1');
     this._animationsService.get(id).subscribe({
       next: (_res: Animation) => {
-        this.animationData = _res;
-        this.frames = ((this.animationData.frames != undefined && this.animationData.frames?.length! > 0) ? this.animationData.frames : this.frames) || this.frames;
-        this.animationData.frames = this.frames;
+        this.animation = _res;
+        this.frames = ((this.animation.frames != undefined && this.animation.frames?.length! > 0) ? this.animation.frames : this.frames) || this.frames;
+        this.animation.frames = this.frames;
         this.selectedFrame = this.frames[0];
 
         this.loading = false;
@@ -84,6 +87,10 @@ export class EditComponent implements OnInit {
       error: (error: any) => {
         console.log(error);
       },
+    });
+
+    this._socketService.on('animationStatusUpdated', (status: any) => {
+      this.playingAnimation = status.playing;
     });
 
     this._socketService.on("stateUpdated", (remoteState: PartState) => { this.onRemoteStateUpdated(remoteState); });
@@ -161,6 +168,25 @@ export class EditComponent implements OnInit {
     this.selectedFrame = this.frames[this.frames.length - 1];
   }
 
+  protected previewFrame() {
+    this._animatorService.applyFrame(this.selectedFrame).subscribe({
+      next: (_res: any) => {
+        console.log(_res);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
+
+  protected playAnimation() {
+    if (this.playingAnimation) { return; }
+
+    //this.saveAnimation();
+
+    this._animatorService.playAnimation(this.animation.id);
+  }
+
   protected captureFrameData() {
     this.selectedFrame.data = []
     this.actualStates.forEach(val => this.selectedFrame.data!.push(Object.assign({}, val)));
@@ -176,9 +202,9 @@ export class EditComponent implements OnInit {
 
   protected saveAnimation() {
     if (this.componentsWorking) { return; }
-    
+
     this.loading = true;
-    this._animationsService.save(this.animationData).subscribe({
+    this._animationsService.save(this.animation).subscribe({
       next: (_res: any) => {
         console.log(_res);
         this.loading = false;
@@ -187,7 +213,12 @@ export class EditComponent implements OnInit {
         console.log(error);
       },
     });
-    console.log(this.animationData);
+    console.log(this.animation);
+  }
+
+
+  protected goHome() {
+    this._router.navigate([`/`]);
   }
 }
 

@@ -1,0 +1,42 @@
+<div style="padding-left: 15px; padding-right:15px; padding-top:5px">
+
+</div>
+
+
+<div style="padding: 15px; padding-top:5px; width:100vw;">
+
+  <div class="ui attached top segment secondary blue">
+    <button class="ui icon button compact blue inverted" (click)="goHome()">
+      <i class="home icon"></i>
+    </button>
+  </div>
+
+  <br><br>
+
+  <button class="circular ui icon button massive" *ngFor="let item of pssS['sequence']">
+    <i class="arrow alternate circle {{item}} icon"></i>
+  </button>
+  <div class="ui divider"></div>
+
+  <div class="ui attached bottom blurring segment animation-buttons" style="margin-bottom: 10px;">
+
+    <button class="circular ui icon button massive" (click)="unloadAdmin()">
+      <i class="hand point left icon"></i>
+    </button>
+    <button class="circular ui icon button massive red" (click)="addItem('up')">
+      <i class="arrow alternate circle up icon"></i>
+    </button>
+    <button class="circular ui icon button massive green" (click)="addItem('down')">
+      <i class="arrow alternate circle down icon"></i>
+    </button>
+    <button class="circular ui icon button massive yellow" (click)="addItem('left')">
+      <i class="arrow alternate circle left icon"></i>
+    </button>
+    <button class="circular ui icon button massive blue" (click)="addItem('right')">
+      <i class="arrow alternate circle right icon"></i>
+    </button>
+    <button class="circular ui icon button massive" (click)="sendSequence(false)">
+      <i class="hand point right icon"></i>
+    </button>
+  </div>
+</div>

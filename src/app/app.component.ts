@@ -11,7 +11,9 @@ import { SystemService } from './services/system.service';
 export class AppComponent implements OnInit {
   title = 'Catrina 7M';
 
-  constructor() { }
+  constructor(
+    private _socketService: SocketService
+  ) { }
 
   ngOnInit(): void {
   }

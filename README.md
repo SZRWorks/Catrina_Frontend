@@ -1,3 +1,3 @@
-# FokinCatrina_Frontend
+# Catrina_Frontend
 
-Max re putisimo
+Apartado Front-End de pagina para el control de una catrina animatrónica
